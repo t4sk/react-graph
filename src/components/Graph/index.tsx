@@ -6,6 +6,7 @@ import {
   Point,
   Layout,
   Range,
+  XRange,
   XAxis,
   YAxis,
   XAxisAlign,
@@ -42,7 +43,8 @@ export interface Props {
   onMouseMove?: (
     e: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
     mouse: Point | null,
-    layout: Layout
+    layout: Layout,
+    xRange: XRange | null
   ) => void
   onMouseOut?: (
     e: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
@@ -212,7 +214,7 @@ const Graph: React.FC<Partial<Props>> = (props) => {
     if (!onMouseMove) {
       return
     }
-    onMouseMove(e, getMouse(ctx.current, e), getLayout(params))
+    onMouseMove(e, getMouse(ctx.current, e), getLayout(params), null)
   }
 
   function _onMouseOut(e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) {

@@ -18,6 +18,11 @@ export interface Range {
   yMax: number
 }
 
+export interface XRange {
+  xMin: number
+  xMax: number
+}
+
 export interface Box {
   top: number
   left: number
