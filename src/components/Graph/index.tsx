@@ -49,6 +49,16 @@ export interface Props {
     mouse: Point | null,
     layout: Layout
   ) => void
+  onMouseDown?: (
+    e: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
+    mouse: Point | null,
+    layout: Layout
+  ) => void
+  onMouseUp?: (
+    e: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
+    mouse: Point | null,
+    layout: Layout
+  ) => void
 }
 
 interface GraphParams extends Props {
@@ -153,6 +163,8 @@ const Graph: React.FC<Partial<Props>> = (props) => {
     borderRadius = 0,
     onMouseMove,
     onMouseOut,
+    onMouseDown,
+    onMouseUp,
   } = params
   const layout = getLayout(params)
 
@@ -210,6 +222,20 @@ const Graph: React.FC<Partial<Props>> = (props) => {
     onMouseOut(e, getMouse(ctx.current, e), getLayout(params))
   }
 
+  function _onMouseDown(e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) {
+    if (!onMouseDown) {
+      return
+    }
+    onMouseDown(e, getMouse(ctx.current, e), getLayout(params))
+  }
+
+  function _onMouseUp(e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) {
+    if (!onMouseUp) {
+      return
+    }
+    onMouseUp(e, getMouse(ctx.current, e), getLayout(params))
+  }
+
   return (
     <div
       style={{
@@ -246,6 +272,8 @@ const Graph: React.FC<Partial<Props>> = (props) => {
         height={height}
         onMouseMove={_onMouseMove}
         onMouseOut={_onMouseOut}
+        onMouseDown={_onMouseDown}
+        onMouseUp={_onMouseUp}
       ></canvas>
     </div>
   )
