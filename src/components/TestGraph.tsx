@@ -1,9 +1,10 @@
 import React, { useState } from "react"
 import Graph from "./Graph"
 import draggable from "./Graph/draggable"
+import zoomable from "./Graph/zoomable"
 import { Point, Layout, XRange } from "./Graph/canvas/types"
 
-const DraggableGraph = draggable(Graph)
+const ZoomDragGraph = zoomable(draggable(Graph))
 
 const t0 = Math.floor(new Date().getTime() / 1000)
 
@@ -87,14 +88,26 @@ const TestGraph: React.FC<{}> = ({}) => {
     }
   }
 
+  function onWheel(
+    e: React.WheelEvent<HTMLCanvasElement>,
+    mouse: Point | null,
+    layout: Layout,
+    xRange: XRange | null
+  ) {
+    if (xRange) {
+      setState({
+        xMin: xRange.xMin,
+        xMax: xRange.xMax,
+      })
+    }
+  }
+
   function onMouseOut() {
     setMouse(null)
   }
 
-  // TODO: zoom
-
   return (
-    <DraggableGraph
+    <ZoomDragGraph
       width={WIDTH}
       height={HEIGHT}
       backgroundColor="beige"
@@ -201,6 +214,7 @@ const TestGraph: React.FC<{}> = ({}) => {
       onMouseUp={onMouseUp}
       onMouseMove={onMouseMove}
       onMouseOut={onMouseOut}
+      onWheel={onWheel}
     />
   )
 }

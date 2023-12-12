@@ -59,10 +59,10 @@ export interface DragProps {
   }
 }
 
-export default function draggable(
-  Component: React.ComponentType<Partial<GraphProps>>
-): React.FC<Partial<GraphProps> & DragProps> {
-  return ({ ...props }: Partial<GraphProps> & DragProps) => {
+export default function draggable<T>(
+  Component: React.ComponentType<Partial<GraphProps> & T>
+): React.FC<Partial<GraphProps> & DragProps & T> {
+  return ({ ...props }: Partial<GraphProps> & DragProps & T) => {
     const {
       range: { xMin, xMax },
     } = props
@@ -113,7 +113,12 @@ export default function draggable(
       }
     }
 
-    function onMouseMove(e: any, mouse: Point | null, layout: Layout) {
+    function onMouseMove(
+      e: any,
+      mouse: Point | null,
+      layout: Layout,
+      _: XRange | null
+    ) {
       let xRange: XRange | null = null
       if (mouse && ref.current?.dragging) {
         xRange = getXRange(ref.current, mouse, layout.graph)

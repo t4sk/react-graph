@@ -61,6 +61,12 @@ export interface Props {
     mouse: Point | null,
     layout: Layout
   ) => void
+  onWheel?: (
+    e: React.WheelEvent<HTMLCanvasElement>,
+    mouse: Point | null,
+    layout: Layout,
+    xRange: XRange | null
+  ) => void
 }
 
 interface GraphParams extends Props {
@@ -131,7 +137,9 @@ function withDefaultParams(props: Partial<Props>): GraphParams {
 
 function getMouse(
   ctx: Context,
-  e: React.MouseEvent<HTMLCanvasElement, MouseEvent>
+  e:
+    | React.MouseEvent<HTMLCanvasElement, MouseEvent>
+    | React.WheelEvent<HTMLCanvasElement>
 ): Point | null {
   if (!ctx.ui) {
     return null
@@ -167,6 +175,7 @@ const Graph: React.FC<Partial<Props>> = (props) => {
     onMouseOut,
     onMouseDown,
     onMouseUp,
+    onWheel,
   } = params
   const layout = getLayout(params)
 
@@ -211,31 +220,33 @@ const Graph: React.FC<Partial<Props>> = (props) => {
   }
 
   function _onMouseMove(e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) {
-    if (!onMouseMove) {
-      return
+    if (onMouseMove) {
+      onMouseMove(e, getMouse(ctx.current, e), getLayout(params), null)
     }
-    onMouseMove(e, getMouse(ctx.current, e), getLayout(params), null)
   }
 
   function _onMouseOut(e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) {
-    if (!onMouseOut) {
-      return
+    if (onMouseOut) {
+      onMouseOut(e, getMouse(ctx.current, e), getLayout(params))
     }
-    onMouseOut(e, getMouse(ctx.current, e), getLayout(params))
   }
 
   function _onMouseDown(e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) {
-    if (!onMouseDown) {
-      return
+    if (onMouseDown) {
+      onMouseDown(e, getMouse(ctx.current, e), getLayout(params))
     }
-    onMouseDown(e, getMouse(ctx.current, e), getLayout(params))
   }
 
   function _onMouseUp(e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) {
-    if (!onMouseUp) {
-      return
+    if (onMouseUp) {
+      onMouseUp(e, getMouse(ctx.current, e), getLayout(params))
     }
-    onMouseUp(e, getMouse(ctx.current, e), getLayout(params))
+  }
+
+  function _onWheel(e: React.WheelEvent<HTMLCanvasElement>) {
+    if (onWheel) {
+      onWheel(e, getMouse(ctx.current, e), getLayout(params), null)
+    }
   }
 
   return (
@@ -276,6 +287,7 @@ const Graph: React.FC<Partial<Props>> = (props) => {
         onMouseOut={_onMouseOut}
         onMouseDown={_onMouseDown}
         onMouseUp={_onMouseUp}
+        onWheel={_onWheel}
       ></canvas>
     </div>
   )
