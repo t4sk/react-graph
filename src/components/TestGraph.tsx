@@ -1,7 +1,9 @@
-import React, { useState, useRef } from "react"
-import Graph, { Props as GraphProps } from "./Graph"
-import { Point, Layout, Box } from "./Graph/canvas/types"
-import * as math from "./Graph/canvas/math"
+import React, { useState } from "react"
+import Graph from "./Graph"
+import draggable from "./Graph/draggable"
+import { Point, Layout, XRange } from "./Graph/canvas/types"
+
+const DraggableGraph = draggable(Graph)
 
 const t0 = Math.floor(new Date().getTime() / 1000)
 
@@ -38,166 +40,12 @@ const Y_LABEL_HEIGHT = 20
 const WIDTH = 600
 const HEIGHT = 400
 
-interface Drag {
-  dragging: boolean
-  startMouseX: number | null
-  startXMin: number | null
-  startXMax: number | null
-  xMin: number
-  xMax: number
-}
-
-function getXRange(
-  drag: Drag,
-  mouse: Point,
-  graph: Box
-): { xMin: number; xMax: number } {
-  if (
-    !mouse.x ||
-    !mouse.y ||
-    !drag.dragging ||
-    !drag.startMouseX ||
-    !drag.startXMax ||
-    !drag.startXMin ||
-    !math.isInside(graph, mouse)
-  ) {
-    return {
-      xMin: drag.xMin,
-      xMax: drag.xMax,
-    }
-  }
-
-  const diff = mouse.x - drag.startMouseX
-
-  const xMin = math.getX(
-    graph.width,
-    graph.left,
-    drag.startXMax,
-    drag.startXMin,
-    graph.left - diff
-  )
-
-  const xMax = math.getX(
-    graph.width,
-    graph.left,
-    drag.startXMax,
-    drag.startXMin,
-    graph.width + graph.left - diff
-  )
-
-  return {
-    xMin,
-    xMax,
-  }
-}
-
-interface DragProps {
-  xMin: number
-  xMax: number
-}
-
-export function draggable(
-  Component: React.ComponentType<Partial<GraphProps>>
-): React.FC<Partial<GraphProps> & DragProps> {
-  return ({ xMin, xMax, ...props }: Partial<GraphProps> & DragProps) => {
-    const ref = useRef<Drag>({
-      dragging: false,
-      startMouseX: null,
-      startXMin: null,
-      startXMax: null,
-      xMin,
-      xMax,
-    })
-
-    ref.current.xMin = xMin
-    ref.current.xMax = xMax
-
-    function reset() {
-      ref.current.dragging = false
-      ref.current.startMouseX = null
-      ref.current.startXMin = null
-      ref.current.startXMax = null
-    }
-
-    function onMouseDown(
-      e: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
-      mouse: Point | null,
-      layout: Layout
-    ) {
-      if (mouse && math.isInside(layout.graph, mouse)) {
-        ref.current.dragging = true
-        ref.current.startMouseX = mouse.x
-        ref.current.startXMin = ref.current.xMin
-        ref.current.startXMax = ref.current.xMax
-      }
-
-      if (props.onMouseDown) {
-        onMouseDown(e, mouse, layout)
-      }
-    }
-
-    function onMouseUp(
-      e: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
-      mouse: Point | null,
-      layout: Layout
-    ) {
-      reset()
-      if (onMouseUp) {
-        onMouseUp(e, mouse, layout)
-      }
-    }
-
-    function onMouseMove(e: any, mouse: Point | null, layout: Layout) {
-      if (mouse) {
-        const xRange = getXRange(ref.current, mouse, layout.graph)
-
-        // setState({
-        //   xMin: xRange.xMin,
-        //   xMax: xRange.xMax,
-        // })
-      }
-      if (onMouseMove) {
-        onMouseMove(e, mouse, layout)
-      }
-    }
-
-    function onMouseOut(e: any, mouse: Point | null, layout: Layout) {
-      reset()
-      if (onMouseOut) {
-        onMouseOut(e, mouse, layout)
-      }
-    }
-
-    return (
-      <Component
-        {...props}
-        onMouseDown={onMouseDown}
-        onMouseUp={onMouseUp}
-        onMouseMove={onMouseMove}
-        onMouseOut={onMouseOut}
-      />
-    )
-  }
-}
-
 const TestGraph: React.FC<{}> = ({}) => {
   const [{ xMin, xMax }, setState] = useState({
     xMin: X_MIN,
     xMax: X_MAX,
   })
   const [mouse, setMouse] = useState<Point | null>(null)
-
-  const ref = useRef<Drag>({
-    dragging: false,
-    startMouseX: null,
-    startXMin: null,
-    startXMax: null,
-    xMin,
-    xMax,
-  })
-
-  ref.current.xMin = xMin
-  ref.current.xMax = xMax
 
   const range = {
     xMin,
@@ -206,59 +54,47 @@ const TestGraph: React.FC<{}> = ({}) => {
     yMax: Y_MAX,
   }
 
-  function reset() {
-    ref.current.dragging = false
-    ref.current.startMouseX = null
-    ref.current.startXMin = null
-    ref.current.startXMax = null
-  }
-
   function onMouseDown(
     e: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
     mouse: Point | null,
     layout: Layout
-  ) {
-    if (mouse && math.isInside(layout.graph, mouse)) {
-      ref.current.dragging = true
-      ref.current.startMouseX = mouse.x
-      ref.current.startXMin = ref.current.xMin
-      ref.current.startXMax = ref.current.xMax
-    }
-  }
+  ) {}
 
   function onMouseUp(
     e: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
     mouse: Point | null,
     layout: Layout
+  ) {}
+
+  function onMouseMove(
+    e: any,
+    mouse: Point | null,
+    layout: Layout,
+    xRange: XRange | null
   ) {
-    reset()
-  }
-
-  function onMouseMove(e: any, point: Point | null, layout: Layout) {
-    if (point) {
-      const xRange = getXRange(ref.current, point, layout.graph)
-
+    if (mouse) {
       setMouse({
-        x: point.x,
-        y: point.y,
+        x: mouse.x,
+        y: mouse.y,
       })
 
-      setState({
-        xMin: xRange.xMin,
-        xMax: xRange.xMax,
-      })
+      if (xRange) {
+        setState({
+          xMin: xRange.xMin,
+          xMax: xRange.xMax,
+        })
+      }
     }
   }
 
   function onMouseOut() {
-    reset()
     setMouse(null)
   }
 
-  // TODO: zoom, drag
+  // TODO: zoom
 
   return (
-    <Graph
+    <DraggableGraph
       width={WIDTH}
       height={HEIGHT}
       backgroundColor="beige"
