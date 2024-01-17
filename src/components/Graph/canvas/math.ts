@@ -1,6 +1,10 @@
 import { Box } from "./types"
 
-export function findNearestIndex(arr: number[], x: number): number {
+export function findNearestIndex<A>(
+  arr: A[],
+  get: (a: A) => number,
+  x: number
+): number {
   let low = 0
   let high = arr.length - 1
 
@@ -8,7 +12,7 @@ export function findNearestIndex(arr: number[], x: number): number {
     return high
   }
 
-  if (arr[low] > arr[high]) {
+  if (get(arr[low]) > get(arr[high])) {
     throw new Error("data not sorted")
   }
 
@@ -16,7 +20,7 @@ export function findNearestIndex(arr: number[], x: number): number {
   while (low < high) {
     let mid = ((low + high) / 2) >> 0
 
-    if (arr[mid] > x) {
+    if (get(arr[mid]) > x) {
       high = mid
     } else {
       low = mid + 1
