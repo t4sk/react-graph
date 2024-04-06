@@ -1,5 +1,5 @@
 import { CanvasContext, Layout, LineGraph, Range } from "./types"
-import { getCanvasX, getCanvasY } from "./math"
+import { get_canvas_x, get_canvas_y } from "./math"
 
 export function draw(
   ctx: CanvasContext,
@@ -10,22 +10,22 @@ export function draw(
   const {
     graph: { top, left, width, height },
   } = layout
-  const { xMin, xMax, yMin, yMax } = range
+  const { x_min, x_max, y_min, y_max } = range
 
-  const { data = [], step = 0, lineColor = "", lineWidth = 1 } = graph
+  const { data = [], step = 0, line_color = "", line_width = 1 } = graph
 
-  ctx.strokeStyle = lineColor
-  ctx.lineWidth = lineWidth
+  ctx.strokeStyle = line_color
+  ctx.lineWidth = line_width
 
   if (step > 0) {
     ctx.beginPath()
     for (let i = 0; i < data.length; i += step) {
       const { x, y } = data[i]
 
-      if (xMin <= x && x <= xMax) {
+      if (x_min <= x && x <= x_max) {
         ctx.lineTo(
-          getCanvasX(width, left, xMax, xMin, x),
-          getCanvasY(height, top, yMax, yMin, y)
+          get_canvas_x(width, left, x_max, x_min, x),
+          get_canvas_y(height, top, y_max, y_min, y)
         )
       }
     }

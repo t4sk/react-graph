@@ -42,95 +42,95 @@ const WIDTH = 600
 const HEIGHT = 400
 
 const TestGraph: React.FC<{}> = ({}) => {
-  const [{ xMin, xMax }, setState] = useState({
-    xMin: X_MIN,
-    xMax: X_MAX,
+  const [{ x_min, x_max }, set_state] = useState({
+    x_min: X_MIN,
+    x_max: X_MAX,
   })
-  const [mouse, setMouse] = useState<Point | null>(null)
+  const [mouse, set_mouse] = useState<Point | null>(null)
 
   const range = {
-    xMin,
-    xMax,
-    yMin: Y_MIN,
-    yMax: Y_MAX,
+    x_min,
+    x_max,
+    y_min: Y_MIN,
+    y_max: Y_MAX,
   }
 
-  function onMouseDown(
+  function on_mouse_down(
     e: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
     mouse: Point | null,
     layout: Layout
   ) {}
 
-  function onMouseUp(
+  function on_mouse_up(
     e: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
     mouse: Point | null,
     layout: Layout
   ) {}
 
-  function onMouseMove(
+  function on_mouse_move(
     e: any,
     mouse: Point | null,
     layout: Layout,
-    xRange: XRange | null
+    x_range: XRange | null
   ) {
     if (mouse) {
-      setMouse({
+      set_mouse({
         x: mouse.x,
         y: mouse.y,
       })
 
-      if (xRange) {
-        setState({
-          xMin: xRange.xMin,
-          xMax: xRange.xMax,
+      if (x_range) {
+        set_state({
+          x_min: x_range.x_min,
+          x_max: x_range.x_max,
         })
       }
     }
   }
 
-  function onWheel(
+  function on_wheel(
     e: React.WheelEvent<HTMLCanvasElement>,
     mouse: Point | null,
     layout: Layout,
-    xRange: XRange | null
+    x_range: XRange | null
   ) {
-    if (xRange) {
-      setState({
-        xMin: xRange.xMin,
-        xMax: xRange.xMax,
+    if (x_range) {
+      set_state({
+        x_min: x_range.x_min,
+        x_max: x_range.x_max,
       })
     }
   }
 
-  function onMouseOut() {
-    setMouse(null)
+  function on_mouse_out() {
+    set_mouse(null)
   }
 
   return (
     <ZoomDragGraph
       width={WIDTH}
       height={HEIGHT}
-      backgroundColor="beige"
+      bg_color="beige"
       animate={true}
       range={range}
-      xAxis={{
-        xTickInterval: 24 * 3600,
-        renderXTick: (x: number) =>
+      x_axis={{
+        x_tick_interval: 24 * 3600,
+        render_x_tick: (x: number) =>
           new Date(x * 1000).toISOString().slice(0, 10),
       }}
-      yAxis={{
-        yTickInterval: 1000,
+      y_axis={{
+        y_tick_interval: 1000,
       }}
       graphs={[
         {
           type: "line",
-          lineColor: "green",
+          line_color: "green",
           step: 1,
           data: DATA[0],
         },
         {
           type: "line",
-          lineColor: "orange",
+          line_color: "orange",
           step: 1,
           data: DATA[1],
         },
@@ -145,10 +145,10 @@ const TestGraph: React.FC<{}> = ({}) => {
       ]}
       crosshair={{
         point: mouse,
-        yLineColor: "red",
-        yLineWidth: 0.5,
-        xLineColor: "green",
-        xLineWidth: 4,
+        y_line_color: "red",
+        y_line_width: 0.5,
+        x_line_color: "green",
+        x_line_width: 4,
       }}
       texts={[
         {
@@ -166,16 +166,16 @@ const TestGraph: React.FC<{}> = ({}) => {
           top: 10 + 15,
         },
       ]}
-      xLabels={[
+      x_labels={[
         {
           // x: (X_MIN + X_MAX) / 2,
           width: X_LABEL_WIDTH,
           height: X_LABEL_HEIGHT,
           render: (x: number) => x.toString(),
           color: "white",
-          backgroundColor: "black",
-          drawLine: true,
-          lineColor: "green",
+          bg_color: "black",
+          draw_line: true,
+          line_color: "green",
         },
         {
           // x: X_MIN,
@@ -183,21 +183,21 @@ const TestGraph: React.FC<{}> = ({}) => {
           height: X_LABEL_HEIGHT,
           render: (x: number) => x.toString(),
           color: "white",
-          backgroundColor: "black",
-          drawLine: true,
-          lineColor: "green",
+          bg_color: "black",
+          draw_line: true,
+          line_color: "green",
         },
       ]}
-      yLabels={[
+      y_labels={[
         {
           // y: (Y_MIN + Y_MAX) / 2,
           width: Y_LABEL_WIDTH,
           height: Y_LABEL_HEIGHT,
           render: (y: number) => y.toString(),
           color: "white",
-          backgroundColor: "black",
-          drawLine: true,
-          lineColor: "orange",
+          bg_color: "black",
+          draw_line: true,
+          line_color: "orange",
         },
         {
           // y: Y_MIN,
@@ -205,16 +205,16 @@ const TestGraph: React.FC<{}> = ({}) => {
           height: Y_LABEL_HEIGHT,
           render: (y: number) => y.toString(),
           color: "white",
-          backgroundColor: "black",
-          drawLine: true,
-          lineColor: "orange",
+          bg_color: "black",
+          draw_line: true,
+          line_color: "orange",
         },
       ]}
-      onMouseDown={onMouseDown}
-      onMouseUp={onMouseUp}
-      onMouseMove={onMouseMove}
-      onMouseOut={onMouseOut}
-      onWheel={onWheel}
+      on_mouse_down={on_mouse_down}
+      on_mouse_up={on_mouse_up}
+      on_mouse_move={on_mouse_move}
+      on_mouse_out={on_mouse_out}
+      on_wheel={on_wheel}
     />
   )
 }

@@ -1,6 +1,6 @@
 import { Box } from "./types"
 
-export function findNearestIndex<A>(
+export function find_nearest_index<A>(
   arr: A[],
   get: (a: A) => number,
   x: number
@@ -30,7 +30,7 @@ export function findNearestIndex<A>(
   return low
 }
 
-export function isInside(
+export function is_inside(
   box: Box,
   point: { x: number | undefined; y: number | undefined }
 ): boolean {
@@ -39,7 +39,6 @@ export function isInside(
   if (!x || x < box.left || x > box.left + box.width) {
     return false
   }
-
   if (!y || y < box.top || y > box.top + box.height) {
     return false
   }
@@ -51,7 +50,7 @@ export function bound(x: number, a: number, b: number): number {
   return Math.min(b, Math.max(a, x))
 }
 
-export function stepBelow(x: number, step: number): number {
+export function step_below(x: number, step: number): number {
   return x - (x % step)
 }
 
@@ -64,46 +63,46 @@ export function lin(dy: number, dx: number, x: number, y0: number): number {
   return (dy / dx) * x + y0
 }
 
-export function getCanvasX(
+export function get_canvas_x(
   width: number,
   left: number,
-  xMax: number,
-  xMin: number,
+  x_max: number,
+  x_min: number,
   x: number
 ): number {
-  const dx = xMax - xMin
-  return lin(width, dx, x, left - (width * xMin) / dx)
+  const dx = x_max - x_min
+  return lin(width, dx, x, left - (width * x_min) / dx)
 }
 
-export function getCanvasY(
+export function get_canvas_y(
   height: number,
   top: number,
-  yMax: number,
-  yMin: number,
+  y_max: number,
+  y_min: number,
   y: number
 ): number {
-  const dy = yMax - yMin
-  return lin(-height, dy, y, top + (height * yMax) / dy)
+  const dy = y_max - y_min
+  return lin(-height, dy, y, top + (height * y_max) / dy)
 }
 
-export function getX(
+export function get_x(
   width: number,
   left: number,
-  xMax: number,
-  xMin: number,
-  canvasX: number
+  x_max: number,
+  x_min: number,
+  canvas_x: number
 ): number {
-  const dx = xMax - xMin
-  return lin(dx, width, canvasX, xMin - (dx / width) * left)
+  const dx = x_max - x_min
+  return lin(dx, width, canvas_x, x_min - (dx / width) * left)
 }
 
-export function getY(
+export function get_y(
   height: number,
   top: number,
-  yMax: number,
-  yMin: number,
-  canvasY: number
+  y_max: number,
+  y_min: number,
+  canvas_y: number
 ): number {
-  const dy = yMax - yMin
-  return lin(-dy, height, canvasY, yMax + (dy / height) * top)
+  const dy = y_max - y_min
+  return lin(-dy, height, canvas_y, y_max + (dy / height) * top)
 }

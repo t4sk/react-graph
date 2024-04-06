@@ -7,78 +7,81 @@ import {
   YAxisAlign,
   TextAlign,
 } from "./types"
-import { getCanvasY } from "./math"
+import { get_canvas_y } from "./math"
 
-function getLeft(
+function get_left(
   graph: Box,
-  labelWidth: number,
-  yAxis: { yAxisAlign: YAxisAlign; yTickLength: number }
+  label_width: number,
+  y_axis: { y_axis_align: YAxisAlign; y_tick_length: number }
 ): number {
-  const { yAxisAlign, yTickLength } = yAxis
+  const { y_axis_align, y_tick_length } = y_axis
 
-  if (yAxisAlign == "left") {
-    return graph.left - labelWidth - yTickLength
+  if (y_axis_align == "left") {
+    return graph.left - label_width - y_tick_length
   }
-  if (yAxisAlign == "right") {
-    return graph.left + graph.width + yTickLength
+  if (y_axis_align == "right") {
+    return graph.left + graph.width + y_tick_length
   }
 
   return 0
 }
 
-function getTextAlign(yAxisAlign: YAxisAlign): TextAlign {
-  switch (yAxisAlign) {
+function get_text_align(y_axis_align: YAxisAlign): TextAlign {
+  switch (y_axis_align) {
     case "left":
       return "right"
     case "right":
       return "left"
     default:
-      console.error(`invalid yAxisAlign ${yAxisAlign}`)
+      console.error(`invalid y_axis_align ${y_axis_align}`)
       return "right"
   }
 }
 
-function getTextLeft(
+function get_text_left(
   left: number,
-  label: { textPadding: number; width: number },
-  yAxisAlign: YAxisAlign
+  label: { text_padding: number; width: number },
+  y_axis_align: YAxisAlign
 ): number {
-  const { textPadding, width } = label
+  const { text_padding, width } = label
 
-  switch (yAxisAlign) {
+  switch (y_axis_align) {
     case "left":
-      return left + width - textPadding
+      return left + width - text_padding
     case "right":
-      return left + textPadding
+      return left + text_padding
     default:
-      console.error(`invalid yAxisAlign ${yAxisAlign}`)
-      return left + width - textPadding
+      console.error(`invalid y_axis_align ${y_axis_align}`)
+      return left + width - text_padding
   }
 }
 
-function getLineStart(
+function get_line_start(
   graph: Box,
-  yAxis: { yAxisAlign: YAxisAlign; yTickLength: number }
+  y_axis: { y_axis_align: YAxisAlign; y_tick_length: number }
 ): number {
-  const { yAxisAlign, yTickLength } = yAxis
+  const { y_axis_align, y_tick_length } = y_axis
 
-  if (yAxisAlign == "left") {
-    return graph.left - yTickLength
+  if (y_axis_align == "left") {
+    return graph.left - y_tick_length
   }
-  if (yAxisAlign == "right") {
-    return graph.left + graph.width + yTickLength
+  if (y_axis_align == "right") {
+    return graph.left + graph.width + y_tick_length
   }
 
   return 0
 }
 
-function getLineEnd(graph: Box, yAxis: { yAxisAlign: YAxisAlign }): number {
-  const { yAxisAlign } = yAxis
+function get_line_end(
+  graph: Box,
+  y_axis: { y_axis_align: YAxisAlign }
+): number {
+  const { y_axis_align } = y_axis
 
-  if (yAxisAlign == "left") {
+  if (y_axis_align == "left") {
     return graph.left + graph.width
   }
-  if (yAxisAlign == "right") {
+  if (y_axis_align == "right") {
     return graph.left
   }
 
@@ -90,39 +93,39 @@ export function draw(
   layout: Layout,
   range: Range,
   label: Partial<YLabel>,
-  yAxis: {
-    yAxisAlign: YAxisAlign
-    yTickLength: number
+  y_axis: {
+    y_axis_align: YAxisAlign
+    y_tick_length: number
   }
 ) {
   const { graph } = layout
-  const { yMin, yMax } = range
+  const { y_min, y_max } = range
   const {
-    getY,
+    get_y,
     width = 50,
     height = 20,
-    backgroundColor = "white",
+    bg_color = "white",
     font = "",
     color = "black",
-    textPadding = 10,
+    text_padding = 10,
     render,
-    drawLine = true,
-    lineWidth = 1,
-    lineColor = "black",
+    draw_line = true,
+    line_width = 1,
+    line_color = "black",
   } = label
 
-  if (!getY) {
+  if (!get_y) {
     return
   }
 
-  const y = getY(layout, range)
+  const y = get_y(layout, range)
 
-  if (y != null && yMin <= y && y <= yMax) {
-    const canvasY = getCanvasY(graph.height, graph.top, yMax, yMin, y)
-    const top = canvasY - Math.round(height / 2)
-    const left = getLeft(graph, width, yAxis)
+  if (y != null && y_min <= y && y <= y_max) {
+    const canvas_y = get_canvas_y(graph.height, graph.top, y_max, y_min, y)
+    const top = canvas_y - Math.round(height / 2)
+    const left = get_left(graph, width, y_axis)
 
-    ctx.fillStyle = backgroundColor
+    ctx.fillStyle = bg_color
 
     // label box
     ctx.fillRect(left, top, width, height)
@@ -130,27 +133,27 @@ export function draw(
     // text
     ctx.font = font
     ctx.fillStyle = color
-    ctx.textAlign = getTextAlign(yAxis.yAxisAlign)
+    ctx.textAlign = get_text_align(y_axis.y_axis_align)
     ctx.textBaseline = "middle"
 
     if (render) {
       ctx.fillText(
         render(y),
-        getTextLeft(left, { textPadding, width }, yAxis.yAxisAlign),
-        top + textPadding
+        get_text_left(left, { text_padding, width }, y_axis.y_axis_align),
+        top + text_padding
       )
     }
 
-    if (drawLine) {
-      ctx.lineWidth = lineWidth
-      ctx.strokeStyle = lineColor
+    if (draw_line) {
+      ctx.lineWidth = line_width
+      ctx.strokeStyle = line_color
 
-      const lineStart = getLineStart(graph, yAxis)
-      const lineEnd = getLineEnd(graph, yAxis)
+      const line_start = get_line_start(graph, y_axis)
+      const line_end = get_line_end(graph, y_axis)
 
       ctx.beginPath()
-      ctx.moveTo(lineStart, top + height / 2)
-      ctx.lineTo(lineEnd, top + height / 2)
+      ctx.moveTo(line_start, top + height / 2)
+      ctx.lineTo(line_end, top + height / 2)
       ctx.stroke()
     }
   }

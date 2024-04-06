@@ -1,5 +1,5 @@
 import { CanvasContext, Layout, Crosshair } from "./types"
-import { isInside } from "./math"
+import { is_inside } from "./math"
 
 export function draw(
   ctx: CanvasContext,
@@ -12,26 +12,25 @@ export function draw(
 
   const {
     point,
-    showXLine = false,
-    xLineColor = "",
-    xLineWidth = 0.5,
-    showYLine = false,
-    yLineColor = "",
-    yLineWidth = 0.5,
+    show_x_line = false,
+    x_line_color = "",
+    x_line_width = 0.5,
+    show_y_line = false,
+    y_line_color = "",
+    y_line_width = 0.5,
   } = crosshair
 
-  if (!point) {
-    return
-  }
-
-  if (!isInside({ top, left, width, height }, { x: point.x, y: point.y })) {
+  if (
+    !point ||
+    !is_inside({ top, left, width, height }, { x: point.x, y: point.y })
+  ) {
     return
   }
 
   // x line
-  if (showXLine) {
-    ctx.strokeStyle = xLineColor
-    ctx.lineWidth = xLineWidth
+  if (show_x_line) {
+    ctx.strokeStyle = x_line_color
+    ctx.lineWidth = x_line_width
 
     ctx.beginPath()
     ctx.moveTo(point.x, top)
@@ -40,9 +39,9 @@ export function draw(
   }
 
   // y line
-  if (showYLine) {
-    ctx.strokeStyle = yLineColor
-    ctx.lineWidth = yLineWidth
+  if (show_y_line) {
+    ctx.strokeStyle = y_line_color
+    ctx.lineWidth = y_line_width
 
     ctx.beginPath()
     ctx.moveTo(left, point.y)

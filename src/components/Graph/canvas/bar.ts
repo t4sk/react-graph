@@ -1,5 +1,5 @@
 import { CanvasContext, Layout, Range, BarGraph } from "./types"
-import { getCanvasX, getCanvasY } from "./math"
+import { get_canvas_x, get_canvas_y } from "./math"
 
 export function draw(
   ctx: CanvasContext,
@@ -10,31 +10,31 @@ export function draw(
   const {
     graph: { top, left, width, height },
   } = layout
-  const { xMin, xMax, yMin, yMax } = range
+  const { x_min, x_max, y_min, y_max } = range
 
   const {
     data = [],
     step = 1,
-    getBarColor = () => "",
-    barWidth = 1,
-    y0 = yMin,
+    get_bar_color = () => "",
+    bar_width = 1,
+    y0 = y_min,
   } = graph
 
-  const canvasY0 = getCanvasY(height, top, yMax, yMin, y0)
+  const canvas_y0 = get_canvas_y(height, top, y_max, y_min, y0)
 
   if (step > 0) {
     for (let i = 0; i < data.length; i += step) {
       const d = data[i]
       const { x, y } = d
 
-      if (xMin <= x && x <= xMax) {
-        const canvasX = getCanvasX(width, left, xMax, xMin, x)
-        const canvasY = getCanvasY(height, top, yMax, yMin, y)
+      if (x_min <= x && x <= x_max) {
+        const canvas_x = get_canvas_x(width, left, x_max, x_min, x)
+        const canvas_y = get_canvas_y(height, top, y_max, y_min, y)
 
-        const barHeight = canvasY0 - canvasY
+        const bar_height = canvas_y0 - canvas_y
 
-        ctx.fillStyle = getBarColor(d)
-        ctx.fillRect(canvasX - barWidth / 2, canvasY, barWidth, barHeight)
+        ctx.fillStyle = get_bar_color(d)
+        ctx.fillRect(canvas_x - bar_width / 2, canvas_y, bar_width, bar_height)
       }
     }
   }

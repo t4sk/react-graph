@@ -7,39 +7,39 @@ const DEFAULT_ZOOM_RATE = 0.1
 
 export interface Zoom {
   rate: number
-  xMin: number
-  xMax: number
+  x_min: number
+  x_max: number
 }
 
-function getXRange(
+function get_x_range(
   zoom: Zoom,
   e: React.WheelEvent<HTMLCanvasElement>,
   mouse: Point,
   graph: Box
 ) {
-  const { xMin, xMax, rate } = zoom
+  const { x_min, x_max, rate } = zoom
 
-  if (!math.isInside(graph, mouse)) {
+  if (!math.is_inside(graph, mouse)) {
     return {
-      xMin,
-      xMax,
+      x_min,
+      x_max,
     }
   }
 
   const { deltaY } = e
-  const x = math.getX(graph.width, graph.left, xMax, xMin, mouse.x)
+  const x = math.get_x(graph.width, graph.left, x_max, x_min, mouse.x)
 
   if (deltaY > 0) {
     // zoom out
     return {
-      xMin: x - (x - xMin) * (1 + rate),
-      xMax: x + (xMax - x) * (1 + rate),
+      x_min: x - (x - x_min) * (1 + rate),
+      x_max: x + (x_max - x) * (1 + rate),
     }
   } else {
     // zoom in
     return {
-      xMin: x - (x - xMin) * (1 - rate),
-      xMax: x + (xMax - x) * (1 - rate),
+      x_min: x - (x - x_min) * (1 - rate),
+      x_max: x + (x_max - x) * (1 - rate),
     }
   }
 }
@@ -47,8 +47,8 @@ function getXRange(
 export interface ZoomProps {
   zoomRate?: number
   range: {
-    xMin: number
-    xMax: number
+    x_min: number
+    x_max: number
   }
 }
 
@@ -58,34 +58,34 @@ export default function zoomable<T>(
   return ({ ...props }: Partial<GraphProps> & ZoomProps & T) => {
     const {
       zoomRate = DEFAULT_ZOOM_RATE,
-      range: { xMin, xMax },
+      range: { x_min, x_max },
     } = props
 
     const ref = useRef<Zoom>({
       rate: zoomRate,
-      xMin,
-      xMax,
+      x_min,
+      x_max,
     })
 
-    ref.current.xMin = xMin
-    ref.current.xMax = xMax
+    ref.current.x_min = x_min
+    ref.current.x_max = x_max
     ref.current.rate = zoomRate
 
-    function onWheel(
+    function on_wheel(
       e: React.WheelEvent<HTMLCanvasElement>,
       mouse: Point | null,
       layout: Layout,
       _: XRange | null
     ) {
-      let xRange: XRange | null = null
+      let x_range: XRange | null = null
       if (mouse) {
-        xRange = getXRange(ref.current, e, mouse, layout.graph)
+        x_range = get_x_range(ref.current, e, mouse, layout.graph)
       }
-      if (props.onWheel) {
-        props.onWheel(e, mouse, layout, xRange)
+      if (props.on_wheel) {
+        props.on_wheel(e, mouse, layout, x_range)
       }
     }
 
-    return <Component {...props} onWheel={onWheel} />
+    return <Component {...props} on_wheel={on_wheel} />
   }
 }

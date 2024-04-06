@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react"
 import { draw } from "./canvas"
-import { getLayout } from "./canvas/layout"
+import { get_layout } from "./canvas/layout"
 import {
   Context,
   Point,
@@ -28,114 +28,114 @@ export interface Props {
   width: number
   height: number
   padding: number
-  backgroundColor: string
-  borderRadius?: number
+  bg_color: string
+  border_radius?: number
   animate?: boolean
   range: Range
-  xAxis: Partial<XAxis>
-  yAxis: Partial<YAxis>
+  x_axis: Partial<XAxis>
+  y_axis: Partial<YAxis>
   // graphs
   graphs: GraphType[]
   texts: Partial<Text>[]
-  xLabels: Partial<XLabel>[]
-  yLabels: Partial<YLabel>[]
+  x_labels: Partial<XLabel>[]
+  y_labels: Partial<YLabel>[]
   crosshair?: Partial<Crosshair>
-  onMouseMove?: (
+  on_mouse_move?: (
     e: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
     mouse: Point | null,
     layout: Layout,
-    xRange: XRange | null
+    x_range: XRange | null
   ) => void
-  onMouseOut?: (
+  on_mouse_out?: (
     e: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
     mouse: Point | null,
     layout: Layout
   ) => void
-  onMouseDown?: (
+  on_mouse_down?: (
     e: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
     mouse: Point | null,
     layout: Layout
   ) => void
-  onMouseUp?: (
+  on_mouse_up?: (
     e: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
     mouse: Point | null,
     layout: Layout
   ) => void
-  onWheel?: (
+  on_wheel?: (
     e: React.WheelEvent<HTMLCanvasElement>,
     mouse: Point | null,
     layout: Layout,
-    xRange: XRange | null
+    x_range: XRange | null
   ) => void
 }
 
 interface GraphParams extends Props {
-  xAxis: XAxis
-  yAxis: YAxis
+  x_axis: XAxis
+  y_axis: YAxis
 }
 
 const DEFAULT_PARAMS: GraphParams = {
   width: 500,
   height: 300,
   padding: 10,
-  backgroundColor: "",
-  borderRadius: 0,
+  bg_color: "",
+  border_radius: 0,
   animate: false,
   range: {
-    xMin: 0,
-    xMax: 0,
-    yMin: 0,
-    yMax: 0,
+    x_min: 0,
+    x_max: 0,
+    y_min: 0,
+    y_max: 0,
   },
-  xAxis: {
-    xAxisAlign: "bottom" as XAxisAlign,
-    xAxisHeight: 30,
-    xAxisLineColor: "black",
-    xTicks: [],
-    xTickInterval: 0,
-    xTickLength: 10,
-    renderXTick: (x: number) => x.toString(),
-    xAxisFont: "",
-    xAxisTextColor: "black",
-    showXLine: true,
-    xLineColor: "lightgrey",
+  x_axis: {
+    x_axis_align: "bottom" as XAxisAlign,
+    x_axis_height: 30,
+    x_axis_line_color: "black",
+    x_ticks: [],
+    x_tick_interval: 0,
+    x_tick_length: 10,
+    render_x_tick: (x: number) => x.toString(),
+    x_axis_font: "",
+    x_axis_text_color: "black",
+    show_x_line: true,
+    x_line_color: "lightgrey",
   },
-  yAxis: {
-    yAxisAlign: "left" as YAxisAlign,
-    yAxisWidth: 50,
-    yAxisLineColor: "black",
-    yTicks: [],
-    yTickInterval: 0,
-    yTickLength: 10,
-    renderYTick: (y: number) => y.toString(),
-    yAxisFont: "",
-    yAxisTextColor: "black",
-    showYLine: true,
-    yLineColor: "lightgrey",
+  y_axis: {
+    y_axis_align: "left" as YAxisAlign,
+    y_axis_width: 50,
+    y_axis_line_color: "black",
+    y_ticks: [],
+    y_tick_interval: 0,
+    y_tick_length: 10,
+    render_y_tick: (y: number) => y.toString(),
+    y_axis_font: "",
+    y_axis_text_color: "black",
+    show_y_line: true,
+    y_line_color: "lightgrey",
   },
   // graphs
   graphs: [],
   texts: [],
-  xLabels: [],
-  yLabels: [],
+  x_labels: [],
+  y_labels: [],
 }
 
-function withDefaultParams(props: Partial<Props>): GraphParams {
+function with_default_params(props: Partial<Props>): GraphParams {
   return {
     ...DEFAULT_PARAMS,
     ...props,
-    xAxis: {
-      ...DEFAULT_PARAMS.xAxis,
-      ...props?.xAxis,
+    x_axis: {
+      ...DEFAULT_PARAMS.x_axis,
+      ...props?.x_axis,
     },
-    yAxis: {
-      ...DEFAULT_PARAMS.yAxis,
-      ...props?.yAxis,
+    y_axis: {
+      ...DEFAULT_PARAMS.y_axis,
+      ...props?.y_axis,
     },
   }
 }
 
-function getMouse(
+function get_mouse(
   ctx: Context,
   e:
     | React.MouseEvent<HTMLCanvasElement, MouseEvent>
@@ -165,19 +165,19 @@ interface Refs {
 }
 
 const Graph: React.FC<Partial<Props>> = (props) => {
-  const params = withDefaultParams(props)
+  const params = with_default_params(props)
   const {
     width,
     height,
-    backgroundColor = "",
-    borderRadius = 0,
-    onMouseMove,
-    onMouseOut,
-    onMouseDown,
-    onMouseUp,
-    onWheel,
+    bg_color = "",
+    border_radius = 0,
+    on_mouse_move,
+    on_mouse_out,
+    on_mouse_down,
+    on_mouse_up,
+    on_wheel,
   } = params
-  const layout = getLayout(params)
+  const layout = get_layout(params)
 
   const refs = useRef<Refs>({
     axes: null,
@@ -219,33 +219,33 @@ const Graph: React.FC<Partial<Props>> = (props) => {
     }
   }
 
-  function _onMouseMove(e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) {
-    if (onMouseMove) {
-      onMouseMove(e, getMouse(ctx.current, e), getLayout(params), null)
+  function _on_mouse_move(e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) {
+    if (on_mouse_move) {
+      on_mouse_move(e, get_mouse(ctx.current, e), get_layout(params), null)
     }
   }
 
-  function _onMouseOut(e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) {
-    if (onMouseOut) {
-      onMouseOut(e, getMouse(ctx.current, e), getLayout(params))
+  function _on_wheel_out(e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) {
+    if (on_mouse_out) {
+      on_mouse_out(e, get_mouse(ctx.current, e), get_layout(params))
     }
   }
 
-  function _onMouseDown(e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) {
-    if (onMouseDown) {
-      onMouseDown(e, getMouse(ctx.current, e), getLayout(params))
+  function _on_mouse_down(e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) {
+    if (on_mouse_down) {
+      on_mouse_down(e, get_mouse(ctx.current, e), get_layout(params))
     }
   }
 
-  function _onMouseUp(e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) {
-    if (onMouseUp) {
-      onMouseUp(e, getMouse(ctx.current, e), getLayout(params))
+  function _on_mouse_up(e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) {
+    if (on_mouse_up) {
+      on_mouse_up(e, get_mouse(ctx.current, e), get_layout(params))
     }
   }
 
-  function _onWheel(e: React.WheelEvent<HTMLCanvasElement>) {
-    if (onWheel) {
-      onWheel(e, getMouse(ctx.current, e), getLayout(params), null)
+  function _on_wheel(e: React.WheelEvent<HTMLCanvasElement>) {
+    if (on_wheel) {
+      on_wheel(e, get_mouse(ctx.current, e), get_layout(params), null)
     }
   }
 
@@ -256,8 +256,8 @@ const Graph: React.FC<Partial<Props>> = (props) => {
         cursor: "crosshair",
         width,
         height,
-        backgroundColor,
-        borderRadius,
+        backgroundColor: bg_color,
+        borderRadius: border_radius,
       }}
     >
       <canvas
@@ -283,11 +283,11 @@ const Graph: React.FC<Partial<Props>> = (props) => {
         style={STYLE}
         width={width}
         height={height}
-        onMouseMove={_onMouseMove}
-        onMouseOut={_onMouseOut}
-        onMouseDown={_onMouseDown}
-        onMouseUp={_onMouseUp}
-        onWheel={_onWheel}
+        onMouseMove={_on_mouse_move}
+        onMouseOut={_on_wheel_out}
+        onMouseDown={_on_mouse_down}
+        onMouseUp={_on_mouse_up}
+        onWheel={_on_wheel}
       ></canvas>
     </div>
   )

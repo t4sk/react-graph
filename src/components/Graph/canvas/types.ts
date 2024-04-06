@@ -12,15 +12,15 @@ export interface Point {
 }
 
 export interface Range {
-  xMin: number
-  xMax: number
-  yMin: number
-  yMax: number
+  x_min: number
+  x_max: number
+  y_min: number
+  y_max: number
 }
 
 export interface XRange {
-  xMin: number
-  xMax: number
+  x_min: number
+  x_max: number
 }
 
 export interface Box {
@@ -32,8 +32,8 @@ export interface Box {
 
 export interface Layout {
   graph: Box
-  yAxis: Box
-  xAxis: Box
+  y_axis: Box
+  x_axis: Box
 }
 
 export type XAxisAlign = "top" | "bottom"
@@ -41,42 +41,42 @@ export type YAxisAlign = "left" | "right"
 export type TextAlign = "left" | "right"
 
 export interface XAxis {
-  xAxisAlign: XAxisAlign
-  xAxisHeight: number
-  xAxisLineColor: string
-  xAxisFont: string
-  xAxisTextColor: string
-  showXLine: boolean
-  xLineColor: string
-  xTicks: number[]
-  xTickInterval: number
-  xTickLength: number
-  renderXTick?: (x: number) => string
+  x_axis_align: XAxisAlign
+  x_axis_height: number
+  x_axis_line_color: string
+  x_axis_font: string
+  x_axis_text_color: string
+  show_x_line: boolean
+  x_line_color: string
+  x_ticks: number[]
+  x_tick_interval: number
+  x_tick_length: number
+  render_x_tick?: (x: number) => string
 }
 
 export interface YAxis {
-  yAxisAlign: YAxisAlign
-  yAxisWidth: number
-  yAxisLineColor: string
-  yAxisFont: string
-  yAxisTextColor: string
-  showYLine: boolean
-  yLineColor: string
-  yTicks: number[]
-  yTickInterval: number
-  yTickLength: number
-  renderYTick?: (y: number) => string
+  y_axis_align: YAxisAlign
+  y_axis_width: number
+  y_axis_line_color: string
+  y_axis_font: string
+  y_axis_text_color: string
+  show_y_line: boolean
+  y_line_color: string
+  y_ticks: number[]
+  y_tick_interval: number
+  y_tick_length: number
+  render_y_tick?: (y: number) => string
 }
 
 export interface Crosshair {
   // canvas x, y
   point: Point | null
-  showXLine: boolean
-  xLineColor: string
-  xLineWidth: number
-  showYLine: boolean
-  yLineColor: string
-  yLineWidth: number
+  show_x_line: boolean
+  x_line_color: string
+  x_line_width: number
+  show_y_line: boolean
+  y_line_color: string
+  y_line_width: number
 }
 
 export interface Text {
@@ -88,31 +88,31 @@ export interface Text {
 }
 
 export interface XLabel {
-  getX?: (layout: Layout, range: Range) => number | null
+  get_x?: (layout: Layout, range: Range) => number | null
   width: number
   height: number
-  backgroundColor: string
+  bg_color: string
   color: string
   font: string
-  textPadding: number
+  text_padding: number
   render?: (x: number) => string
-  drawLine: boolean
-  lineWidth: number
-  lineColor: string
+  draw_line: boolean
+  line_width: number
+  line_color: string
 }
 
 export interface YLabel {
-  getY?: (layout: Layout, range: Range) => number | null
+  get_y?: (layout: Layout, range: Range) => number | null
   width: number
   height: number
-  backgroundColor: string
+  bg_color: string
   color: string
   font: string
-  textPadding: number
+  text_padding: number
   render?: (y: number) => string
-  drawLine: boolean
-  lineWidth: number
-  lineColor: string
+  draw_line: boolean
+  line_width: number
+  line_color: string
 }
 
 export interface Bar {
@@ -123,24 +123,24 @@ export interface Bar {
 export interface BarGraph {
   data: Bar[]
   step: number
-  getBarColor: (bar: Bar) => string
-  barWidth: number
+  get_bar_color: (bar: Bar) => string
+  bar_width: number
   y0: number
 }
 
 export interface LineGraph {
   data: Point[]
   step: number
-  lineColor: string
-  lineWidth: number
+  line_color: string
+  line_width: number
 }
 
 export interface PointGraph {
   data: Point[]
   color: string
   radius: number
-  ambientColor: string
-  ambientRadius: number
+  ambient_color: string
+  ambient_radius: number
 }
 
 export interface BarGraphType extends Partial<BarGraph> {

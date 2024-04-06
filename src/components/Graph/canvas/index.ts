@@ -12,35 +12,35 @@ import {
   Graph as GraphType,
 } from "./types"
 
-import * as xAxis from "../canvas/x-axis"
-import * as yAxis from "../canvas/y-axis"
+import * as x_axis from "../canvas/x-axis"
+import * as y_axis from "../canvas/y-axis"
 import * as bar from "../canvas/bar"
 import * as line from "../canvas/line"
 import * as point from "../canvas/point"
 import * as crosshair from "../canvas/crosshair"
 import * as text from "../canvas/text"
-import * as xLabel from "../canvas/x-label"
-import * as yLabel from "../canvas/y-label"
+import * as x_label from "../canvas/x-label"
+import * as y_label from "../canvas/y-label"
 
 export interface Params {
   width: number
   height: number
   padding: number
-  backgroundColor: string
+  bg_color: string
   animate?: boolean
   range: Range
   // x axis
-  xAxis: XAxis
-  yAxis: YAxis
+  x_axis: XAxis
+  y_axis: YAxis
   // graphs
   graphs: GraphType[]
   texts: Partial<Text>[]
-  xLabels: Partial<XLabel>[]
-  yLabels: Partial<YLabel>[]
+  x_labels: Partial<XLabel>[]
+  y_labels: Partial<YLabel>[]
   crosshair?: Partial<Crosshair>
 }
 
-function _drawGraph(
+function _draw_graph(
   ctx: CanvasContext,
   layout: Layout,
   range: Range,
@@ -69,14 +69,14 @@ export function draw(ctx: Context, layout: Layout, params: Params) {
   ctx.ui?.clearRect(0, 0, width, height)
 
   if (ctx.axes) {
-    xAxis.draw(ctx.axes, layout, range, params.xAxis)
-    yAxis.draw(ctx.axes, layout, range, params.yAxis)
+    x_axis.draw(ctx.axes, layout, range, params.x_axis)
+    y_axis.draw(ctx.axes, layout, range, params.y_axis)
   }
 
   if (ctx.graph) {
     const len = params.graphs.length
     for (let i = 0; i < len; i++) {
-      _drawGraph(ctx.graph, layout, range, params.graphs[i])
+      _draw_graph(ctx.graph, layout, range, params.graphs[i])
     }
   }
 
@@ -94,16 +94,16 @@ export function draw(ctx: Context, layout: Layout, params: Params) {
       text.draw(ctx.ui, texts[i])
     }
 
-    const { xLabels } = params
-    len = xLabels.length
+    const { x_labels } = params
+    len = x_labels.length
     for (let i = 0; i < len; i++) {
-      xLabel.draw(ctx.ui, layout, range, xLabels[i], params.xAxis)
+      x_label.draw(ctx.ui, layout, range, x_labels[i], params.x_axis)
     }
 
-    const { yLabels } = params
-    len = yLabels.length
+    const { y_labels } = params
+    len = y_labels.length
     for (let i = 0; i < len; i++) {
-      yLabel.draw(ctx.ui, layout, range, yLabels[i], params.yAxis)
+      y_label.draw(ctx.ui, layout, range, y_labels[i], params.y_axis)
     }
   }
 }
