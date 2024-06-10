@@ -1,49 +1,46 @@
 import { CanvasContext, Layout, Range, Box, XAxisAlign, XLabel } from "./types"
-import { get_canvas_x } from "./math"
+import { getCanvasX } from "./math"
 
-function get_top(
+function getTop(
   graph: Box,
-  label_height: number,
-  x_axis: { x_axis_align: XAxisAlign; x_tick_length: number }
+  labelHeight: number,
+  xAxis: { xAxisAlign: XAxisAlign; xTickLength: number }
 ): number {
-  const { x_axis_align, x_tick_length } = x_axis
+  const { xAxisAlign, xTickLength } = xAxis
 
-  if (x_axis_align == "top") {
-    return graph.top - label_height - x_tick_length
+  if (xAxisAlign == "top") {
+    return graph.top - labelHeight - xTickLength
   }
-  if (x_axis_align == "bottom") {
-    return graph.top + graph.height + x_tick_length
+  if (xAxisAlign == "bottom") {
+    return graph.top + graph.height + xTickLength
   }
 
   return 0
 }
 
-function get_line_start(
+function getLineStart(
   graph: Box,
-  x_axis: { x_axis_align: XAxisAlign; x_tick_length: number }
+  xAxis: { xAxisAlign: XAxisAlign; xTickLength: number }
 ): number {
-  const { x_axis_align, x_tick_length } = x_axis
+  const { xAxisAlign, xTickLength } = xAxis
 
-  if (x_axis_align == "top") {
-    return graph.top - x_tick_length
+  if (xAxisAlign == "top") {
+    return graph.top - xTickLength
   }
-  if (x_axis_align == "bottom") {
-    return graph.top + graph.height + x_tick_length
+  if (xAxisAlign == "bottom") {
+    return graph.top + graph.height + xTickLength
   }
 
   return 0
 }
 
-function get_line_end(
-  graph: Box,
-  x_axis: { x_axis_align: XAxisAlign }
-): number {
-  const { x_axis_align } = x_axis
+function getLineEnd(graph: Box, xAxis: { xAxisAlign: XAxisAlign }): number {
+  const { xAxisAlign } = xAxis
 
-  if (x_axis_align == "top") {
+  if (xAxisAlign == "top") {
     return graph.top + graph.height
   }
-  if (x_axis_align == "bottom") {
+  if (xAxisAlign == "bottom") {
     return graph.top
   }
 
@@ -55,40 +52,40 @@ export function draw(
   layout: Layout,
   range: Range,
   label: Partial<XLabel>,
-  x_axis: {
-    x_axis_align: XAxisAlign
-    x_tick_length: number
+  xAxis: {
+    xAxisAlign: XAxisAlign
+    xTickLength: number
   }
 ) {
   const { graph } = layout
-  const { x_min, x_max } = range
+  const { xMin, xMax } = range
   const {
-    get_x,
+    getX,
     width = 50,
     height = 20,
-    bg_color = "white",
+    bgColor = "white",
     font = "",
     color = "black",
-    text_padding = 10,
+    textPadding = 10,
     render,
-    draw_line = true,
-    line_width = 1,
-    line_color = "black",
+    drawLine = true,
+    lineWidth = 1,
+    lineColor = "black",
   } = label
 
-  if (!get_x) {
+  if (!getX) {
     return
   }
 
-  const x = get_x(layout, range)
+  const x = getX(layout, range)
 
-  if (x != null && x_min <= x && x <= x_max) {
-    const canvas_x = get_canvas_x(graph.width, graph.left, x_max, x_min, x)
-    const left = canvas_x - Math.round(width / 2)
-    const top = get_top(graph, height, x_axis)
+  if (x != null && xMin <= x && x <= xMax) {
+    const canvasX = getCanvasX(graph.width, graph.left, xMax, xMin, x)
+    const left = canvasX - Math.round(width / 2)
+    const top = getTop(graph, height, xAxis)
 
     // label box
-    ctx.fillStyle = bg_color
+    ctx.fillStyle = bgColor
     ctx.fillRect(left, top, width, height)
 
     // text
@@ -98,19 +95,19 @@ export function draw(
     ctx.textBaseline = "middle"
 
     if (render) {
-      ctx.fillText(render(x), left + width / 2, top + text_padding)
+      ctx.fillText(render(x), left + width / 2, top + textPadding)
     }
 
-    if (draw_line) {
-      ctx.lineWidth = line_width
-      ctx.strokeStyle = line_color
+    if (drawLine) {
+      ctx.lineWidth = lineWidth
+      ctx.strokeStyle = lineColor
 
-      const line_start = get_line_start(graph, x_axis)
-      const line_end = get_line_end(graph, x_axis)
+      const lineStart = getLineStart(graph, xAxis)
+      const lineEnd = getLineEnd(graph, xAxis)
 
       ctx.beginPath()
-      ctx.moveTo(left + width / 2, line_start)
-      ctx.lineTo(left + width / 2, line_end)
+      ctx.moveTo(left + width / 2, lineStart)
+      ctx.lineTo(left + width / 2, lineEnd)
       ctx.stroke()
     }
   }

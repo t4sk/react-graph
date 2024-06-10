@@ -1,86 +1,86 @@
 import { CanvasContext, Layout, Range, YAxis } from "./types"
-import { get_canvas_y, step_below } from "./math"
+import { getCanvasY, stepBelow } from "./math"
 
 const TICK_TEXT_PADDING = 5
 
-function draw_tick(
+function drawTick(
   ctx: CanvasContext,
   layout: Layout,
   range: Range,
-  y_axis: YAxis,
+  yAxis: YAxis,
   y: number
 ) {
   const {
-    y_axis: { top, left, height, width },
+    yAxis: { top, left, height, width },
   } = layout
-  const { y_min, y_max } = range
+  const { yMin, yMax } = range
 
   const {
-    y_axis_align,
-    y_axis_line_color,
-    y_axis_font,
-    y_axis_text_color,
-    y_tick_length,
-    render_y_tick,
-  } = y_axis
+    yAxisAlign,
+    yAxisLineColor,
+    yAxisFont,
+    yAxisTextColor,
+    yTickLength,
+    renderYTick,
+  } = yAxis
 
-  const canvas_y = get_canvas_y(height, top, y_max, y_min, y)
+  const canvasY = getCanvasY(height, top, yMax, yMin, y)
 
-  ctx.strokeStyle = y_axis_line_color
-  ctx.font = y_axis_font
-  ctx.fillStyle = y_axis_text_color
-  ctx.textAlign = y_axis_align == "left" ? "right" : "left"
+  ctx.strokeStyle = yAxisLineColor
+  ctx.font = yAxisFont
+  ctx.fillStyle = yAxisTextColor
+  ctx.textAlign = yAxisAlign == "left" ? "right" : "left"
   ctx.textBaseline = "middle"
 
-  if (y_axis_align == "left") {
+  if (yAxisAlign == "left") {
     ctx.beginPath()
-    ctx.moveTo(left + width, canvas_y)
-    ctx.lineTo(left + width - y_tick_length, canvas_y)
+    ctx.moveTo(left + width, canvasY)
+    ctx.lineTo(left + width - yTickLength, canvasY)
     ctx.stroke()
 
-    if (render_y_tick) {
+    if (renderYTick) {
       ctx.fillText(
-        render_y_tick(y),
-        left + width - y_tick_length - TICK_TEXT_PADDING,
-        canvas_y
+        renderYTick(y),
+        left + width - yTickLength - TICK_TEXT_PADDING,
+        canvasY
       )
     }
-  } else if (y_axis_align == "right") {
+  } else if (yAxisAlign == "right") {
     ctx.beginPath()
-    ctx.moveTo(left, canvas_y)
-    ctx.lineTo(left + y_tick_length, canvas_y)
+    ctx.moveTo(left, canvasY)
+    ctx.lineTo(left + yTickLength, canvasY)
     ctx.stroke()
 
-    if (render_y_tick) {
+    if (renderYTick) {
       ctx.fillText(
-        render_y_tick(y),
-        left + y_tick_length + TICK_TEXT_PADDING,
-        canvas_y
+        renderYTick(y),
+        left + yTickLength + TICK_TEXT_PADDING,
+        canvasY
       )
     }
   }
 }
 
-function draw_line(
+function drawLine(
   ctx: CanvasContext,
   layout: Layout,
   range: Range,
-  y_axis: YAxis,
+  yAxis: YAxis,
   y: number
 ) {
   const {
     graph: { top, left, height, width },
   } = layout
-  const { y_min, y_max } = range
-  const { y_line_color } = y_axis
+  const { yMin, yMax } = range
+  const { yLineColor } = yAxis
 
-  const canvas_y = get_canvas_y(height, top, y_max, y_min, y)
+  const canvasY = getCanvasY(height, top, yMax, yMin, y)
 
-  ctx.strokeStyle = y_line_color
+  ctx.strokeStyle = yLineColor
 
   ctx.beginPath()
-  ctx.moveTo(left, canvas_y)
-  ctx.lineTo(left + width, canvas_y)
+  ctx.moveTo(left, canvasY)
+  ctx.lineTo(left + width, canvasY)
   ctx.stroke()
 }
 
@@ -88,59 +88,53 @@ export function draw(
   ctx: CanvasContext,
   layout: Layout,
   range: Range,
-  y_axis: YAxis
+  yAxis: YAxis
 ) {
   const {
-    y_axis: { top, left, height, width },
+    yAxis: { top, left, height, width },
   } = layout
-  const { y_min, y_max } = range
+  const { yMin, yMax } = range
 
-  const {
-    show_y_line,
-    y_axis_align,
-    y_axis_line_color,
-    y_ticks,
-    y_tick_interval,
-  } = y_axis
+  const { showYLine, yAxisAlign, yAxisLineColor, yTicks, yTickInterval } = yAxis
 
   // style y axis line
   ctx.lineWidth = 1
-  ctx.strokeStyle = y_axis_line_color
+  ctx.strokeStyle = yAxisLineColor
 
-  if (y_axis_align == "left") {
+  if (yAxisAlign == "left") {
     ctx.beginPath()
     ctx.moveTo(left + width, top)
     ctx.lineTo(left + width, top + height)
     ctx.stroke()
-  } else if (y_axis_align == "right") {
+  } else if (yAxisAlign == "right") {
     ctx.beginPath()
     ctx.moveTo(left, top)
     ctx.lineTo(left, top + height)
     ctx.stroke()
   }
 
-  if (y_tick_interval > 0) {
-    const y0 = step_below(y_min, y_tick_interval)
+  if (yTickInterval > 0) {
+    const y0 = stepBelow(yMin, yTickInterval)
 
-    for (let y = y0; y <= y_max; y += y_tick_interval) {
-      if (y_min <= y && y <= y_max) {
-        draw_tick(ctx, layout, range, y_axis, y)
+    for (let y = y0; y <= yMax; y += yTickInterval) {
+      if (yMin <= y && y <= yMax) {
+        drawTick(ctx, layout, range, yAxis, y)
 
-        if (show_y_line) {
-          draw_line(ctx, layout, range, y_axis, y)
+        if (showYLine) {
+          drawLine(ctx, layout, range, yAxis, y)
         }
       }
     }
   }
 
-  const len = y_ticks.length
+  const len = yTicks.length
   for (let i = 0; i < len; i++) {
-    const y = y_ticks[i]
-    if (y_min <= y && y <= y_max) {
-      draw_tick(ctx, layout, range, y_axis, y)
+    const y = yTicks[i]
+    if (yMin <= y && y <= yMax) {
+      drawTick(ctx, layout, range, yAxis, y)
 
-      if (show_y_line) {
-        draw_line(ctx, layout, range, y_axis, y)
+      if (showYLine) {
+        drawLine(ctx, layout, range, yAxis, y)
       }
     }
   }

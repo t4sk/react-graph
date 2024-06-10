@@ -1,5 +1,5 @@
 import { CanvasContext, Layout, PointGraph, Range } from "./types"
-import { get_canvas_x, get_canvas_y } from "./math"
+import { getCanvasX, getCanvasY } from "./math"
 
 export function draw(
   ctx: CanvasContext,
@@ -10,34 +10,34 @@ export function draw(
   const {
     graph: { top, left, width, height },
   } = layout
-  const { x_min, x_max, y_min, y_max } = range
+  const { xMin, xMax, yMin, yMax } = range
 
   const {
     data = [],
     color = "",
     radius = 1,
-    ambient_color = "",
-    ambient_radius = 0,
+    ambientColor = "",
+    ambientRadius = 0,
   } = graph
 
   const len = data.length
   for (let i = 0; i < len; i++) {
     const { x, y } = data[i]
 
-    if (x_min <= x && x <= x_max) {
-      const canvas_x = get_canvas_x(width, left, x_max, x_min, x)
-      const canvas_y = get_canvas_y(height, top, y_max, y_min, y)
+    if (xMin <= x && x <= xMax) {
+      const canvasX = getCanvasX(width, left, xMax, xMin, x)
+      const canvasY = getCanvasY(height, top, yMax, yMin, y)
 
-      if (ambient_radius > 0) {
+      if (ambientRadius > 0) {
         ctx.beginPath()
-        ctx.arc(canvas_x, canvas_y, ambient_radius, 0, 2 * Math.PI, false)
-        ctx.fillStyle = ambient_color
+        ctx.arc(canvasX, canvasY, ambientRadius, 0, 2 * Math.PI, false)
+        ctx.fillStyle = ambientColor
         ctx.fill()
       }
 
       if (radius > 0) {
         ctx.beginPath()
-        ctx.arc(canvas_x, canvas_y, radius, 0, 2 * Math.PI, false)
+        ctx.arc(canvasX, canvasY, radius, 0, 2 * Math.PI, false)
         ctx.fillStyle = color
         ctx.fill()
       }

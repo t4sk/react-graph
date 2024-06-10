@@ -5,57 +5,57 @@ import * as math from "./canvas/math"
 
 export interface Drag {
   dragging: boolean
-  start_mouse_x: number | null
-  start_x_min: number | null
-  start_x_max: number | null
-  x_min: number
-  x_max: number
+  startMouseX: number | null
+  startXMin: number | null
+  startXMax: number | null
+  xMin: number
+  xMax: number
 }
 
-function get_x_range(drag: Drag, mouse: Point, graph: Box): XRange {
+function getXRange(drag: Drag, mouse: Point, graph: Box): XRange {
   if (
     !mouse.x ||
     !mouse.y ||
     !drag.dragging ||
-    !drag.start_mouse_x ||
-    !drag.start_x_max ||
-    !drag.start_x_min ||
-    !math.is_inside(graph, mouse)
+    !drag.startMouseX ||
+    !drag.startXMax ||
+    !drag.startXMin ||
+    !math.isInside(graph, mouse)
   ) {
     return {
-      x_min: drag.x_min,
-      x_max: drag.x_max,
+      xMin: drag.xMin,
+      xMax: drag.xMax,
     }
   }
 
-  const diff = mouse.x - drag.start_mouse_x
+  const diff = mouse.x - drag.startMouseX
 
-  const x_min = math.get_x(
+  const xMin = math.getX(
     graph.width,
     graph.left,
-    drag.start_x_max,
-    drag.start_x_min,
+    drag.startXMax,
+    drag.startXMin,
     graph.left - diff
   )
 
-  const x_max = math.get_x(
+  const xMax = math.getX(
     graph.width,
     graph.left,
-    drag.start_x_max,
-    drag.start_x_min,
+    drag.startXMax,
+    drag.startXMin,
     graph.width + graph.left - diff
   )
 
   return {
-    x_min,
-    x_max,
+    xMin,
+    xMax,
   }
 }
 
 export interface DragProps {
   range: {
-    x_min: number
-    x_max: number
+    xMin: number
+    xMax: number
   }
 }
 
@@ -64,84 +64,84 @@ export default function draggable<T>(
 ): React.FC<Partial<GraphProps> & DragProps & T> {
   return ({ ...props }: Partial<GraphProps> & DragProps & T) => {
     const {
-      range: { x_min, x_max },
+      range: { xMin, xMax },
     } = props
 
     const ref = useRef<Drag>({
       dragging: false,
-      start_mouse_x: null,
-      start_x_min: null,
-      start_x_max: null,
-      x_min,
-      x_max,
+      startMouseX: null,
+      startXMin: null,
+      startXMax: null,
+      xMin,
+      xMax,
     })
 
-    ref.current.x_min = x_min
-    ref.current.x_max = x_max
+    ref.current.xMin = xMin
+    ref.current.xMax = xMax
 
     function reset() {
       ref.current.dragging = false
-      ref.current.start_mouse_x = null
-      ref.current.start_x_min = null
-      ref.current.start_x_max = null
+      ref.current.startMouseX = null
+      ref.current.startXMin = null
+      ref.current.startXMax = null
     }
 
-    function on_mouse_down(
+    function onMouseDown(
       e: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
       mouse: Point | null,
       layout: Layout
     ) {
-      if (mouse && math.is_inside(layout.graph, mouse)) {
+      if (mouse && math.isInside(layout.graph, mouse)) {
         ref.current.dragging = true
-        ref.current.start_mouse_x = mouse.x
-        ref.current.start_x_min = ref.current.x_min
-        ref.current.start_x_max = ref.current.x_max
+        ref.current.startMouseX = mouse.x
+        ref.current.startXMin = ref.current.xMin
+        ref.current.startXMax = ref.current.xMax
       }
-      if (props.on_mouse_down) {
-        props.on_mouse_down(e, mouse, layout)
+      if (props.onMouseDown) {
+        props.onMouseDown(e, mouse, layout)
       }
     }
 
-    function on_mouse_up(
+    function onMouseUp(
       e: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
       mouse: Point | null,
       layout: Layout
     ) {
       reset()
-      if (props.on_mouse_up) {
-        props.on_mouse_up(e, mouse, layout)
+      if (props.onMouseUp) {
+        props.onMouseUp(e, mouse, layout)
       }
     }
 
-    function on_mouse_move(
+    function onMouseMove(
       e: any,
       mouse: Point | null,
       layout: Layout,
       _: XRange | null
     ) {
-      let x_range: XRange | null = null
+      let xRange: XRange | null = null
       if (mouse && ref.current?.dragging) {
-        x_range = get_x_range(ref.current, mouse, layout.graph)
+        xRange = getXRange(ref.current, mouse, layout.graph)
       }
-      if (props.on_mouse_move) {
-        props.on_mouse_move(e, mouse, layout, x_range)
+      if (props.onMouseMove) {
+        props.onMouseMove(e, mouse, layout, xRange)
       }
     }
 
-    function on_mouse_out(e: any, mouse: Point | null, layout: Layout) {
+    function onMouseOut(e: any, mouse: Point | null, layout: Layout) {
       reset()
-      if (props.on_mouse_out) {
-        props.on_mouse_out(e, mouse, layout)
+      if (props.onMouseOut) {
+        props.onMouseOut(e, mouse, layout)
       }
     }
 
     return (
       <Component
         {...props}
-        on_mouse_down={on_mouse_down}
-        on_mouse_up={on_mouse_up}
-        on_mouse_move={on_mouse_move}
-        on_mouse_out={on_mouse_out}
+        onMouseDown={onMouseDown}
+        onMouseUp={onMouseUp}
+        onMouseMove={onMouseMove}
+        onMouseOut={onMouseOut}
       />
     )
   }

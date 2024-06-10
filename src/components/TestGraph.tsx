@@ -32,105 +32,105 @@ const Y_MAX = DATA[0][149].y
 const X_MIN = DATA[0][0].x
 const X_MAX = DATA[0][149].x
 
-const X_LABEL_WIDTH = 80
-const X_LABEL_HEIGHT = 20
+const xlabelWidth = 80
+const xlabelHeight = 20
 
-const Y_LABEL_WIDTH = 50
-const Y_LABEL_HEIGHT = 20
+const ylabelWidth = 50
+const ylabelHeight = 20
 
 const WIDTH = 600
 const HEIGHT = 400
 
 const TestGraph: React.FC<{}> = ({}) => {
-  const [{ x_min, x_max }, set_state] = useState({
-    x_min: X_MIN,
-    x_max: X_MAX,
+  const [{ xMin, xMax }, setState] = useState({
+    xMin: X_MIN,
+    xMax: X_MAX,
   })
-  const [mouse, set_mouse] = useState<Point | null>(null)
+  const [mouse, setMouse] = useState<Point | null>(null)
 
   const range = {
-    x_min,
-    x_max,
-    y_min: Y_MIN,
-    y_max: Y_MAX,
+    xMin,
+    xMax,
+    yMin: Y_MIN,
+    yMax: Y_MAX,
   }
 
-  function on_mouse_down(
+  function onMouseDown(
     e: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
     mouse: Point | null,
     layout: Layout
   ) {}
 
-  function on_mouse_up(
+  function onMouseUp(
     e: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
     mouse: Point | null,
     layout: Layout
   ) {}
 
-  function on_mouse_move(
+  function onMouseMove(
     e: any,
     mouse: Point | null,
     layout: Layout,
-    x_range: XRange | null
+    xRange: XRange | null
   ) {
     if (mouse) {
-      set_mouse({
+      setMouse({
         x: mouse.x,
         y: mouse.y,
       })
 
-      if (x_range) {
-        set_state({
-          x_min: x_range.x_min,
-          x_max: x_range.x_max,
+      if (xRange) {
+        setState({
+          xMin: xRange.xMin,
+          xMax: xRange.xMax,
         })
       }
     }
   }
 
-  function on_wheel(
+  function onWheel(
     e: React.WheelEvent<HTMLCanvasElement>,
     mouse: Point | null,
     layout: Layout,
-    x_range: XRange | null
+    xRange: XRange | null
   ) {
-    if (x_range) {
-      set_state({
-        x_min: x_range.x_min,
-        x_max: x_range.x_max,
+    if (xRange) {
+      setState({
+        xMin: xRange.xMin,
+        xMax: xRange.xMax,
       })
     }
   }
 
-  function on_mouse_out() {
-    set_mouse(null)
+  function onMouseOut() {
+    setMouse(null)
   }
 
   return (
     <ZoomDragGraph
       width={WIDTH}
       height={HEIGHT}
-      bg_color="beige"
+      bgColor="beige"
       animate={true}
       range={range}
-      x_axis={{
-        x_tick_interval: 24 * 3600,
-        render_x_tick: (x: number) =>
+      xAxis={{
+        xTickInterval: 24 * 3600,
+        renderXTick: (x: number) =>
           new Date(x * 1000).toISOString().slice(0, 10),
       }}
-      y_axis={{
-        y_tick_interval: 1000,
+      yAxis={{
+        yTickInterval: 1000,
       }}
       graphs={[
         {
           type: "line",
-          line_color: "green",
+          lineColor: "green",
           step: 1,
           data: DATA[0],
         },
         {
           type: "line",
-          line_color: "orange",
+          lineColor: "orange",
           step: 1,
           data: DATA[1],
         },
@@ -145,10 +145,10 @@ const TestGraph: React.FC<{}> = ({}) => {
       ]}
       crosshair={{
         point: mouse,
-        y_line_color: "red",
-        y_line_width: 0.5,
-        x_line_color: "green",
-        x_line_width: 4,
+        yLineColor: "red",
+        yLineWidth: 0.5,
+        xLineColor: "green",
+        xLineWidth: 4,
       }}
       texts={[
         {
@@ -166,55 +166,55 @@ const TestGraph: React.FC<{}> = ({}) => {
           top: 10 + 15,
         },
       ]}
-      x_labels={[
+      xLabels={[
         {
-          // x: (X_MIN + X_MAX) / 2,
-          width: X_LABEL_WIDTH,
-          height: X_LABEL_HEIGHT,
+          // x: (xMin + xMax) / 2,
+          width: xlabelWidth,
+          height: xlabelHeight,
           render: (x: number) => x.toString(),
           color: "white",
-          bg_color: "black",
-          draw_line: true,
-          line_color: "green",
+          bgColor: "black",
+          drawLine: true,
+          lineColor: "green",
         },
         {
-          // x: X_MIN,
-          width: X_LABEL_WIDTH,
-          height: X_LABEL_HEIGHT,
+          // x: xMin,
+          width: xlabelWidth,
+          height: xlabelHeight,
           render: (x: number) => x.toString(),
           color: "white",
-          bg_color: "black",
-          draw_line: true,
-          line_color: "green",
+          bgColor: "black",
+          drawLine: true,
+          lineColor: "green",
         },
       ]}
-      y_labels={[
+      yLabels={[
         {
-          // y: (Y_MIN + Y_MAX) / 2,
-          width: Y_LABEL_WIDTH,
-          height: Y_LABEL_HEIGHT,
+          // y: (yMin + yMax) / 2,
+          width: ylabelWidth,
+          height: ylabelHeight,
           render: (y: number) => y.toString(),
           color: "white",
-          bg_color: "black",
-          draw_line: true,
-          line_color: "orange",
+          bgColor: "black",
+          drawLine: true,
+          lineColor: "orange",
         },
         {
-          // y: Y_MIN,
-          width: Y_LABEL_WIDTH,
-          height: Y_LABEL_HEIGHT,
+          // y: yMin,
+          width: ylabelWidth,
+          height: ylabelHeight,
           render: (y: number) => y.toString(),
           color: "white",
-          bg_color: "black",
-          draw_line: true,
-          line_color: "orange",
+          bgColor: "black",
+          drawLine: true,
+          lineColor: "orange",
         },
       ]}
-      on_mouse_down={on_mouse_down}
-      on_mouse_up={on_mouse_up}
-      on_mouse_move={on_mouse_move}
-      on_mouse_out={on_mouse_out}
-      on_wheel={on_wheel}
+      onMouseDown={onMouseDown}
+      onMouseUp={onMouseUp}
+      onMouseMove={onMouseMove}
+      onMouseOut={onMouseOut}
+      onWheel={onWheel}
     />
   )
 }
