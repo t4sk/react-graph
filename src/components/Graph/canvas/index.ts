@@ -22,7 +22,7 @@ import * as text from "../canvas/text"
 import * as xLabel from "../canvas/x-label"
 import * as yLabel from "../canvas/y-label"
 
-export interface Params {
+export type Params = {
   width: number
   height: number
   padding: number
@@ -44,7 +44,7 @@ function _drawGraph(
   ctx: CanvasContext,
   layout: Layout,
   range: Range,
-  graph: GraphType
+  graph: GraphType,
 ) {
   switch (graph.type) {
     case "bar":

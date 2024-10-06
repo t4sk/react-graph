@@ -8,7 +8,7 @@ function drawTick(
   layout: Layout,
   range: Range,
   xAxis: XAxis,
-  x: number
+  x: number,
 ) {
   const {
     xAxis: { top, left, width, height },
@@ -42,7 +42,7 @@ function drawTick(
       ctx.fillText(
         renderXTick(x),
         canvasX,
-        top + height - xTickLength - TICK_TEXT_PADDING
+        top + height - xTickLength - TICK_TEXT_PADDING,
       )
     }
   } else if (xAxisAlign == "bottom") {
@@ -55,7 +55,7 @@ function drawTick(
       ctx.fillText(
         renderXTick(x),
         canvasX,
-        top + xTickLength + TICK_TEXT_PADDING
+        top + xTickLength + TICK_TEXT_PADDING,
       )
     }
   }
@@ -66,7 +66,7 @@ function drawLine(
   layout: Layout,
   range: Range,
   xAxis: XAxis,
-  x: number
+  x: number,
 ) {
   const {
     graph: { left, top, width, height },
@@ -88,7 +88,7 @@ export function draw(
   ctx: CanvasContext,
   layout: Layout,
   range: Range,
-  xAxis: XAxis
+  xAxis: XAxis,
 ) {
   const {
     xAxis: { top, left, width, height },

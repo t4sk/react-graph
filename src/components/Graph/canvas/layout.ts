@@ -1,6 +1,6 @@
 import { XAxisAlign, YAxisAlign, Layout } from "./types"
 
-interface Params {
+type Params = {
   padding: number
   width: number
   height: number

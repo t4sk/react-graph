@@ -5,7 +5,7 @@ export function draw(
   ctx: CanvasContext,
   layout: Layout,
   range: Range,
-  graph: Partial<LineGraph>
+  graph: Partial<LineGraph>,
 ) {
   const {
     graph: { top, left, width, height },
@@ -25,7 +25,7 @@ export function draw(
       if (xMin <= x && x <= xMax) {
         ctx.lineTo(
           getCanvasX(width, left, xMax, xMin, x),
-          getCanvasY(height, top, yMax, yMin, y)
+          getCanvasY(height, top, yMax, yMin, y),
         )
       }
     }

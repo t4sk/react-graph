@@ -4,7 +4,7 @@ import { isInside } from "./math"
 export function draw(
   ctx: CanvasContext,
   layout: Layout,
-  crosshair: Partial<Crosshair>
+  crosshair: Partial<Crosshair>,
 ) {
   const {
     graph: { width, height, left, top },

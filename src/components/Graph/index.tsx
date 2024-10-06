@@ -24,7 +24,7 @@ const STYLE: React.CSSProperties = {
   top: 0,
 }
 
-export interface Props {
+export type Props = {
   width: number
   height: number
   padding: number
@@ -44,28 +44,28 @@ export interface Props {
     e: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
     mouse: Point | null,
     layout: Layout,
-    xRange: XRange | null
+    xRange: XRange | null,
   ) => void
   onMouseOut?: (
     e: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
     mouse: Point | null,
-    layout: Layout
+    layout: Layout,
   ) => void
   onMouseDown?: (
     e: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
     mouse: Point | null,
-    layout: Layout
+    layout: Layout,
   ) => void
   onMouseUp?: (
     e: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
     mouse: Point | null,
-    layout: Layout
+    layout: Layout,
   ) => void
   onWheel?: (
     e: React.WheelEvent<HTMLCanvasElement>,
     mouse: Point | null,
     layout: Layout,
-    xRange: XRange | null
+    xRange: XRange | null,
   ) => void
 }
 
@@ -139,7 +139,7 @@ function getMouse(
   ctx: Context,
   e:
     | React.MouseEvent<HTMLCanvasElement, MouseEvent>
-    | React.WheelEvent<HTMLCanvasElement>
+    | React.WheelEvent<HTMLCanvasElement>,
 ): Point | null {
   if (!ctx.ui) {
     return null
@@ -153,7 +153,7 @@ function getMouse(
   }
 }
 
-interface Refs {
+type Refs = {
   axes: HTMLCanvasElement | null
   graph: HTMLCanvasElement | null
   ui: HTMLCanvasElement | null

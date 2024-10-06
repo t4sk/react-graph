@@ -4,7 +4,7 @@ import { getCanvasX } from "./math"
 function getTop(
   graph: Box,
   labelHeight: number,
-  xAxis: { xAxisAlign: XAxisAlign; xTickLength: number }
+  xAxis: { xAxisAlign: XAxisAlign; xTickLength: number },
 ): number {
   const { xAxisAlign, xTickLength } = xAxis
 
@@ -20,7 +20,7 @@ function getTop(
 
 function getLineStart(
   graph: Box,
-  xAxis: { xAxisAlign: XAxisAlign; xTickLength: number }
+  xAxis: { xAxisAlign: XAxisAlign; xTickLength: number },
 ): number {
   const { xAxisAlign, xTickLength } = xAxis
 
@@ -55,7 +55,7 @@ export function draw(
   xAxis: {
     xAxisAlign: XAxisAlign
     xTickLength: number
-  }
+  },
 ) {
   const { graph } = layout
   const { xMin, xMax } = range

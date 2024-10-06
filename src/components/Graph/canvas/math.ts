@@ -3,7 +3,7 @@ import { Box } from "./types"
 export function findNearestIndex<A>(
   arr: A[],
   get: (a: A) => number,
-  x: number
+  x: number,
 ): number {
   let low = 0
   let high = arr.length - 1
@@ -32,7 +32,7 @@ export function findNearestIndex<A>(
 
 export function isInside(
   box: Box,
-  point: { x: number | undefined; y: number | undefined }
+  point: { x: number | undefined; y: number | undefined },
 ): boolean {
   const { x, y } = point
 
@@ -68,7 +68,7 @@ export function getCanvasX(
   left: number,
   xMax: number,
   xMin: number,
-  x: number
+  x: number,
 ): number {
   const dx = xMax - xMin
   return lin(width, dx, x, left - (width * xMin) / dx)
@@ -79,7 +79,7 @@ export function getCanvasY(
   top: number,
   yMax: number,
   yMin: number,
-  y: number
+  y: number,
 ): number {
   const dy = yMax - yMin
   return lin(-height, dy, y, top + (height * yMax) / dy)
@@ -90,7 +90,7 @@ export function getX(
   left: number,
   xMax: number,
   xMin: number,
-  canvasX: number
+  canvasX: number,
 ): number {
   const dx = xMax - xMin
   return lin(dx, width, canvasX, xMin - (dx / width) * left)
@@ -101,7 +101,7 @@ export function getY(
   top: number,
   yMax: number,
   yMin: number,
-  canvasY: number
+  canvasY: number,
 ): number {
   const dy = yMax - yMin
   return lin(-dy, height, canvasY, yMax + (dy / height) * top)

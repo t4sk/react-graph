@@ -1,36 +1,36 @@
 export type CanvasContext = CanvasRenderingContext2D
 
-export interface Context {
+export type Context = {
   axes: CanvasRenderingContext2D | null | undefined
   graph: CanvasRenderingContext2D | null | undefined
   ui: CanvasRenderingContext2D | null | undefined
 }
 
-export interface Point {
+export type Point = {
   x: number
   y: number
 }
 
-export interface Range {
+export type Range = {
   xMin: number
   xMax: number
   yMin: number
   yMax: number
 }
 
-export interface XRange {
+export type XRange = {
   xMin: number
   xMax: number
 }
 
-export interface Box {
+export type Box = {
   top: number
   left: number
   height: number
   width: number
 }
 
-export interface Layout {
+export type Layout = {
   graph: Box
   yAxis: Box
   xAxis: Box
@@ -40,7 +40,7 @@ export type XAxisAlign = "top" | "bottom"
 export type YAxisAlign = "left" | "right"
 export type TextAlign = "left" | "right"
 
-export interface XAxis {
+export type XAxis = {
   xAxisAlign: XAxisAlign
   xAxisHeight: number
   xAxisLineColor: string
@@ -54,7 +54,7 @@ export interface XAxis {
   renderXTick?: (x: number) => string
 }
 
-export interface YAxis {
+export type YAxis = {
   yAxisAlign: YAxisAlign
   yAxisWidth: number
   yAxisLineColor: string
@@ -68,7 +68,7 @@ export interface YAxis {
   renderYTick?: (y: number) => string
 }
 
-export interface Crosshair {
+export type Crosshair = {
   // canvas x, y
   point: Point | null
   showXLine: boolean
@@ -79,7 +79,7 @@ export interface Crosshair {
   yLineWidth: number
 }
 
-export interface Text {
+export type Text = {
   left: number
   top: number
   text: number | string
@@ -87,7 +87,7 @@ export interface Text {
   font: string
 }
 
-export interface XLabel {
+export type XLabel = {
   getX?: (layout: Layout, range: Range) => number | null
   width: number
   height: number
@@ -101,7 +101,7 @@ export interface XLabel {
   lineColor: string
 }
 
-export interface YLabel {
+export type YLabel = {
   getY?: (layout: Layout, range: Range) => number | null
   width: number
   height: number
@@ -115,12 +115,12 @@ export interface YLabel {
   lineColor: string
 }
 
-export interface Bar {
+export type Bar = {
   x: number
   y: number
 }
 
-export interface BarGraph {
+export type BarGraph = {
   data: Bar[]
   step: number
   getBarColor: (bar: Bar) => string
@@ -128,14 +128,14 @@ export interface BarGraph {
   y0: number
 }
 
-export interface LineGraph {
+export type LineGraph = {
   data: Point[]
   step: number
   lineColor: string
   lineWidth: number
 }
 
-export interface PointGraph {
+export type PointGraph = {
   data: Point[]
   color: string
   radius: number

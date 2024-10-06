@@ -5,7 +5,7 @@ import * as math from "./canvas/math"
 
 const DEFAULT_ZOOM_RATE = 0.1
 
-export interface Zoom {
+export type Zoom = {
   rate: number
   xMin: number
   xMax: number
@@ -44,7 +44,7 @@ function getXRange(
   }
 }
 
-export interface ZoomProps {
+export type ZoomProps = {
   zoomRate?: number
   range: {
     xMin: number

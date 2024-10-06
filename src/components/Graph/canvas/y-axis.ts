@@ -8,7 +8,7 @@ function drawTick(
   layout: Layout,
   range: Range,
   yAxis: YAxis,
-  y: number
+  y: number,
 ) {
   const {
     yAxis: { top, left, height, width },
@@ -42,7 +42,7 @@ function drawTick(
       ctx.fillText(
         renderYTick(y),
         left + width - yTickLength - TICK_TEXT_PADDING,
-        canvasY
+        canvasY,
       )
     }
   } else if (yAxisAlign == "right") {
@@ -55,7 +55,7 @@ function drawTick(
       ctx.fillText(
         renderYTick(y),
         left + yTickLength + TICK_TEXT_PADDING,
-        canvasY
+        canvasY,
       )
     }
   }
@@ -66,7 +66,7 @@ function drawLine(
   layout: Layout,
   range: Range,
   yAxis: YAxis,
-  y: number
+  y: number,
 ) {
   const {
     graph: { top, left, height, width },
@@ -88,7 +88,7 @@ export function draw(
   ctx: CanvasContext,
   layout: Layout,
   range: Range,
-  yAxis: YAxis
+  yAxis: YAxis,
 ) {
   const {
     yAxis: { top, left, height, width },

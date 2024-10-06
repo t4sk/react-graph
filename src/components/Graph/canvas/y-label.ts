@@ -12,7 +12,7 @@ import { getCanvasY } from "./math"
 function getLeft(
   graph: Box,
   labelWidth: number,
-  yAxis: { yAxisAlign: YAxisAlign; yTickLength: number }
+  yAxis: { yAxisAlign: YAxisAlign; yTickLength: number },
 ): number {
   const { yAxisAlign, yTickLength } = yAxis
 
@@ -41,7 +41,7 @@ function getTextAlign(yAxisAlign: YAxisAlign): TextAlign {
 function getTextLeft(
   left: number,
   label: { textPadding: number; width: number },
-  yAxisAlign: YAxisAlign
+  yAxisAlign: YAxisAlign,
 ): number {
   const { textPadding, width } = label
 
@@ -58,7 +58,7 @@ function getTextLeft(
 
 function getLineStart(
   graph: Box,
-  yAxis: { yAxisAlign: YAxisAlign; yTickLength: number }
+  yAxis: { yAxisAlign: YAxisAlign; yTickLength: number },
 ): number {
   const { yAxisAlign, yTickLength } = yAxis
 
@@ -93,7 +93,7 @@ export function draw(
   yAxis: {
     yAxisAlign: YAxisAlign
     yTickLength: number
-  }
+  },
 ) {
   const { graph } = layout
   const { yMin, yMax } = range
@@ -137,7 +137,7 @@ export function draw(
       ctx.fillText(
         render(y),
         getTextLeft(left, { textPadding, width }, yAxis.yAxisAlign),
-        top + textPadding
+        top + textPadding,
       )
     }
 

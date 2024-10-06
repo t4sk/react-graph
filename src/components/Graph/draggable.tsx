@@ -3,7 +3,7 @@ import { Props as GraphProps } from "./index"
 import { Point, Layout, Box, XRange } from "./canvas/types"
 import * as math from "./canvas/math"
 
-export interface Drag {
+export type Drag = {
   dragging: boolean
   startMouseX: number | null
   startXMin: number | null
@@ -52,7 +52,7 @@ function getXRange(drag: Drag, mouse: Point, graph: Box): XRange {
   }
 }
 
-export interface DragProps {
+export type DragProps = {
   range: {
     xMin: number
     xMax: number

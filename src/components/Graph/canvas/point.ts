@@ -5,7 +5,7 @@ export function draw(
   ctx: CanvasContext,
   layout: Layout,
   range: Range,
-  graph: Partial<PointGraph>
+  graph: Partial<PointGraph>,
 ) {
   const {
     graph: { top, left, width, height },
